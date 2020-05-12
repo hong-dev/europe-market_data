@@ -29,8 +29,8 @@ filtered_df2 = df2[
 ]
 
 merged_df = pd.merge(
-    filtered_df1[['Country Code', 'Number of Bed-places']],
     filtered_df2[['Country Code', 'Percentage of individuals online']],
+    filtered_df1[['Country Code', 'Number of Bed-places']],
     how = 'outer',
     on  = 'Country Code'
 ).set_index('Country Code').drop(['EA', 'EU27_2007', 'EU27_2020', 'EU28'])
@@ -39,7 +39,7 @@ valid_df = (
     merged_df
     .replace({'b':''}, regex = True)
     .apply(pd.to_numeric, errors = 'coerce')
-    .sort_values(by = 'Number of Bed-places', ascending = False)
+    .sort_values(by = 'Percentage of individuals online', ascending = False)
 )
 
 valid_df.to_csv('processed_data.csv', index = 'Country Code')
