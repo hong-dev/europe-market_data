@@ -5,7 +5,7 @@ from sklearn.preprocessing import MinMaxScaler, StandardScaler
 
 df = pd.read_csv(
     'processed_data.csv',
-    index_col = 'Country Code'
+    index_col = 'Country Code',
 )
 
 # bar_plot
@@ -50,10 +50,8 @@ fig.update_layout(
         )
     )
 )
-
 fig.show()
 fig.write_image('bar_plot.png', width = 1400, height = 900)
-
 
 # table
 original_table   = df
@@ -66,7 +64,7 @@ normalized_table = normalized_table.rename(
         'Percentage of individuals online': '(Nor) Individuals online',
         'Number of Bed-places'            : '(Nor) Bed-places'
     }
-)
+).round(2)
 
 merged_table = pd.merge(original_table, normalized_table, on = 'Country Code')
 
@@ -84,5 +82,40 @@ merged_table['(Rank) Avg Rank'] = (
 )
 
 merged_table = merged_table.sort_values('(Rank) Avg Rank', ascending = True)
+
+header_values = list(merged_table.columns)
+header_values.insert(0, 'Country Code')
+
+cell_values = [merged_table[column] for column in merged_table.columns]
+cell_values.insert(0, merged_table.index)
+
+fig2 = go.Figure(
+    data = [
+        go.Table(
+            header = dict(
+                values = header_values,
+                align  = 'left',
+                fill_color = '#92a8cd'
+            ),
+            cells = dict(
+                values = cell_values,
+                align  = 'left',
+                fill   = dict(
+                    color = ['#d6dde6', '#eeeeee'])
+            )
+        )
+    ]
+)
+
+fig2.update_layout(
+    title = dict(
+        text      = 'Europe Market for night lamp (sorted by Avg Rank)',
+        font_size = 25,
+        x         = 0.5
+    )
+)
+
+fig2.show()
+fig2.write_image('table.png', width = 1600, height = 1100)
 
 # normalized_plot
