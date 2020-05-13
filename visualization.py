@@ -83,6 +83,7 @@ merged_table['(Rank) Avg Rank'] = (
 
 merged_table = merged_table.sort_values('(Rank) Avg Rank', ascending = True)
 
+
 header_values = list(merged_table.columns)
 header_values.insert(0, 'Country Code')
 
@@ -119,3 +120,29 @@ fig2.show()
 fig2.write_image('table.png', width = 1600, height = 1100)
 
 # normalized_plot
+fig3 = go.Figure()
+
+fig3.add_trace(go.Bar(
+    x     = merged_table.index,
+    y     = merged_table['(Nor) Individuals online'],
+    name  = 'Individuals online',
+    marker_color = '#4C72B0'
+
+))
+fig3.add_trace(go.Bar(
+    x     = merged_table.index,
+    y     = merged_table['(Nor) Bed-places'],
+    name  = 'Bed-places',
+    marker_color = '#55A868'
+))
+
+fig3.update_layout(
+    barmode = 'stack',
+    title = dict(
+        text      = 'Europe Market for night lamp (Normalized)',
+        font_size = 25
+    )
+)
+
+fig3.show()
+fig3.write_image('normalized_plot.png', width = 1400, height = 900)
