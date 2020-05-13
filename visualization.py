@@ -1,9 +1,7 @@
 import pandas as pd
-import matplotlib.pyplot as plt
+import plotly.graph_objs as go
 
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
-
-plt.style.use('seaborn')
 
 df = pd.read_csv(
     'processed_data.csv',
@@ -11,30 +9,51 @@ df = pd.read_csv(
 )
 
 # bar_plot
-bar = df.plot(
-    kind        = 'bar',
-    secondary_y = 'Number of Bed-places',
-    figsize     = (15, 10)
+fig = go.Figure()
+
+fig.add_trace(go.Bar(
+    x     = df.index,
+    y     = df['Percentage of individuals online'],
+    name  = 'Percentage of individuals online',
+    yaxis = 'y',
+    offsetgroup  = 1,
+    marker_color = '#4C72B0'
+
+))
+fig.add_trace(go.Bar(
+    x     = df.index,
+    y     = df['Number of Bed-places'],
+    name  = 'Number of Bed-places',
+    yaxis = 'y2',
+    offsetgroup = 2,
+    marker_color = '#55A868'
+))
+
+fig.update_layout(
+    barmode = 'group',
+    title = dict(
+        text      = 'Europe Market for night lamp',
+        font_size = 25
+    ),
+    yaxis = dict(
+        title     = 'Individuals online (%)',
+        titlefont = dict(
+            color = '#4C72B0'
+        )
+    ),
+    yaxis2 = dict(
+        title     = 'Bed-places',
+        overlaying = 'y',
+        side      = 'right',
+        titlefont = dict(
+            color = '#55A868'
+        )
+    )
 )
 
-bar.set_title(
-    "Europe Market for night lamp",
-    fontsize = 20
-)
+fig.show()
+fig.write_image('bar_plot.png', width = 1400, height = 900)
 
-bar.set_ylabel(
-    "Individuals online (%)",
-    color    = 'blue',
-    fontsize = 10
-)
-
-bar.right_ax.set_ylabel(
-    "Bed-places (millions)",
-    color    = 'green',
-    fontsize = 10
-)
-
-plt.savefig('bar_plot')
 
 # table
 original_table   = df
