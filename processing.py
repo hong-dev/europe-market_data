@@ -39,6 +39,7 @@ valid_df = (
     merged_df
     .replace({'b':''}, regex = True)
     .apply(pd.to_numeric, errors = 'coerce')
+    .fillna(0)
     .sort_values(by = 'Percentage of individuals online', ascending = False)
 )
 
